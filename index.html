@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title> Quotify Project </title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<header id="header-tag">
+    <div class='title-tag'><span id="title-span-tag">Quotify</span></div>
+    <div class='all-links'>
+        <a onclick="generateOnlineQuote()"> <span>Random Quote (Online)</span></a>
+        <a onclick="addQuote()">Add Your Own Quote</a>
+        <a onclick="generateLocalQuote()">Random Quote (Local)</a>
+        <a onclick="listLocalQuotes()">List All Local Quotes</a>
+    </div>
+</header>
+
+<body onload="generateOnlineQuote()">
+
+    <div id="root">
+
+    </div>
+
+    <div id="secondContainerHandle">
+
+    </div>
+
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><span id='up'>&uarr;</span>Top</button><!-- go-to top button -->
+    <button onclick="generateOnlineQuote()" id="onlineBtn" class="btn">Get Another Quote Online </button>
+    <button onclick="saveOnlineQuote()" id="saveToLocalBtn" class="saveBtn"> <i class="fa fa-save">Save</i> </button>
+    <button onclick="generateLocalQuote()" id="getQuoteFromLocal">Get Another Quote From Local Storage</button>
+
+    <script>
+        var rootHandle = document.getElementById('root');
+        var secondContainerHandle = document.getElementById('secondContainerHandle');
+        var saveOnlineQuoteButton = document.getElementById('saveToLocalBtn');
+        var onlineQuoteButton = document.getElementById('onlineBtn');
+        var quoteFromLocalButton = document.getElementById('getQuoteFromLocal');
+
+        //function to create quote elements paragraph
+        function generateParagraph(val) {
+            let p1 = document.createElement('p');
+            let p2 = document.createElement('p');
+            rootHandle.innerHTML = '';
+            secondContainerHandle.innerHTML = '';
+            p1.appendChild(document.createTextNode(val.quote));
+            p2.appendChild(document.createTextNode('~ '));
+            p2.appendChild(document.createTextNode(`${val.author}`));
+            p1.setAttribute('class', 'para-class-quote');
+            p2.setAttribute('class', 'para-class-author');
+            rootHandle.appendChild(p1);
+            rootHandle.appendChild(p2);
+        }
+
+        // function to generate online quote
+        function generateOnlineQuote() {
+            secondContainerHandle.innerHTML = '';
+            rootHandle.innerHTML = '';
+            saveOnlineQuoteButton.disabled = false;
+            onlineQuoteButton.hidden = false;
+            saveOnlineQuoteButton.hidden = false;
+            quoteFromLocalButton.hidden = true;
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://talaikis.com/api/quotes/random/');
+            xhr.send();
+            xhr.onload = function () {
+                data = JSON.parse(xhr.responseText);
+                generatedQuote = {
+                    quote: data.quote || 'undefined',
+                    author: data.author || 'undefined'
+                }
+                generateParagraph(data);
+            }
+            saveOnlineQuoteButton.innerHTML = `<i class="fa fa-save"></i> Save To Local`;
+        }
+
+        //function to save quote from online
+        function saveOnlineQuote() {
+            secondContainerHandle.innerHTML = '';
+            onlineQuoteButton.hidden = false;
+            let localQuotes = localStorage.getItem('localQuotes') ? JSON.parse(localStorage.getItem('localQuotes')) : [];
+            localQuotes.unshift(generatedQuote);
+            localStorage.setItem('localQuotes', JSON.stringify(localQuotes));
+            saveOnlineQuoteButton.innerText = "Saved";
+            saveOnlineQuoteButton.disabled = true;
+            // alert('Quote Saved');
+        }
+
+        //function to generate quote from local storage
+        function generateLocalQuote() {
+            rootHandle.innerHTML = '';
+            onlineQuoteButton.hidden = true;
+            saveOnlineQuoteButton.innerText = "Saved";
+            saveOnlineQuoteButton.disabled = true;
+            saveOnlineQuoteButton.hidden = true;
+            quoteFromLocalButton.hidden = false;
+            let local = JSON.parse(localStorage.getItem('localQuotes'));
+            if (local.length == 0) {
+                rootHandle.appendChild(document.createTextNode('No Locally Stored Quotes'));
+            } else {
+                let value = Math.floor(Math.random() * (local.length));
+                // console.log(value);
+                let quoteData = local[value];
+                generateParagraph(quoteData);
+            }
+        }
+        // var typedAuthor, typedQuote, saveOwnQuoteButton;
+        //function to add own quote by user
+        function addQuote() {
+            let typedQuote = document.createElement('textarea');
+            let saveOwnQuoteButton = document.createElement('button');
+            let typedAuthor = document.createElement('input');
+            let quoteSpan = document.createElement('span');
+            let authorSpan = document.createElement('span');
+
+            secondContainerHandle.innerHTML = '';
+            onlineQuoteButton.hidden = true;
+            saveOnlineQuoteButton.hidden = true;
+            quoteFromLocalButton.hidden = true;
+
+            quoteSpan.setAttribute('id', 'addQuoteSpan');
+            quoteSpan.appendChild(document.createTextNode('Quote'));
+
+            authorSpan.setAttribute('id', 'addAuthorSpan');
+            authorSpan.appendChild(document.createTextNode('Author'));
+
+            typedQuote.setAttribute('id', 'typedQuote');
+            typedQuote.setAttribute('placeholder', 'Enter Quote');
+            // typedQuote.setAttribute('autofocus');
+            // typedQuote.focus(); // to place focus & cursor to the text while editing.
+
+            typedAuthor.setAttribute('type', 'text');
+            typedAuthor.setAttribute('id', 'typedAuthor');
+            typedAuthor.setAttribute('placeholder', 'Enter Author Name');
+
+            saveOwnQuoteButton.setAttribute('id', 'saveUserQuote');
+            saveOwnQuoteButton.setAttribute('onclick', 'saveOwnQuote()');
+            saveOwnQuoteButton.setAttribute('class', 'saveBtn');
+            saveOwnQuoteButton.innerHTML = `<i class="fa fa-save"></i> Save To Local`;
+
+            rootHandle.innerHTML = '';
+            rootHandle.appendChild(quoteSpan);
+            rootHandle.appendChild(typedQuote)
+            rootHandle.appendChild(authorSpan);
+            rootHandle.appendChild(typedAuthor)
+            rootHandle.innerHTML += '';
+            rootHandle.appendChild(saveOwnQuoteButton);
+        }
+
+        //function to save own quote of user
+        function saveOwnQuote() {
+            let typedAuthor = document.getElementById('typedAuthor');
+            let typedQuote = document.getElementById('typedQuote');
+            let saveOwnQuoteButton = document.getElementById('saveUserQuote');
+            let local = JSON.parse(localStorage.getItem('localQuotes'));
+            let newOwnQuote = {
+                quote: typedQuote.value || 'undefined',
+                author: typedAuthor.value || 'undefined'
+            };
+            local.unshift(newOwnQuote);
+            localStorage.setItem('localQuotes', JSON.stringify(local))
+            saveOwnQuoteButton.innerText = 'Saved';
+            saveOwnQuoteButton.disabled = true;
+            typedQuote.value = '';
+            typedAuthor.value = '';
+            // alert('Quote Saved');
+        }
+
+        // function to list all quotes from localStorage
+        function listLocalQuotes() {
+            secondContainerHandle.innerHTML = '';
+            onlineQuoteButton.hidden = true;
+            saveOnlineQuoteButton.hidden = true;
+            quoteFromLocalButton.hidden = true;
+            rootHandle.innerHTML = '';
+            let localStorageQuotes = JSON.parse(localStorage.getItem('localQuotes'));
+            if (localStorageQuotes.length == 0) {
+                rootHandle.innerHTML = `No Locally Stored Quotes`;
+            }
+            for (let i = 0; i < localStorageQuotes.length; i++) {
+                let listDivTag = document.createElement('DIV');
+                let editQuoteBtn = document.createElement('button');
+                let deleteBtn = document.createElement('button');
+                let saveEditBtn = document.createElement('button');
+                let cancelEditBtn = document.createElement('button');
+                let quoteSpanTag = document.createElement('p');
+                let authorSpanTag = document.createElement('p');
+
+                editQuoteBtn.setAttribute('value', i);
+                editQuoteBtn.innerText = 'Edit Quote';
+                editQuoteBtn.innerHTML = `<i class="fa fa-edit"></i> Edit Quote`;
+                editQuoteBtn.setAttribute('class', 'dynamicEdit');
+                editQuoteBtn.setAttribute('onclick', 'editLocalQuote(value)');
+
+
+                quoteSpanTag.setAttribute('value', i);
+                quoteSpanTag.setAttribute('class', 'quoteTag');
+                quoteSpanTag.appendChild(document.createTextNode(localStorageQuotes[i].quote));
+
+
+                authorSpanTag.setAttribute('value', i);
+                authorSpanTag.setAttribute('class', 'authorTag');
+                authorSpanTag.appendChild(document.createTextNode('~ '));
+                authorSpanTag.appendChild(document.createTextNode(`${localStorageQuotes[i].author}`));
+
+                deleteBtn.setAttribute('value', i);
+                deleteBtn.setAttribute('class', 'dynamicDelete');
+                deleteBtn.setAttribute('onclick', 'deleteLocalQuote(value)');
+                deleteBtn.innerHTML = `<i class="fa fa-trash"></i> Delete`;
+
+
+                saveEditBtn.setAttribute('value', i);
+                saveEditBtn.innerHTML = `<i class="fa fa-save"></i> Save`;
+                saveEditBtn.setAttribute('class', 'dynamicSave');
+                saveEditBtn.setAttribute('onclick', 'saveEditedQuote(value)')
+                saveEditBtn.disabled = true;
+                saveEditBtn.hidden = true;
+
+                cancelEditBtn.innerHTML = `<i class="fa fa-close"></i> Cancel`
+                cancelEditBtn.setAttribute('value', i);
+                cancelEditBtn.setAttribute('onclick', 'cancelEdit()');
+                cancelEditBtn.setAttribute('class', 'dynamicCancel')
+                cancelEditBtn.disabled = true;
+                cancelEditBtn.hidden = true;
+
+                listDivTag.setAttribute('class', 'tempDiv');
+                listDivTag.appendChild(quoteSpanTag);
+                listDivTag.appendChild(authorSpanTag);
+                listDivTag.appendChild(editQuoteBtn);
+                listDivTag.appendChild(saveEditBtn);
+                listDivTag.appendChild(cancelEditBtn);
+                listDivTag.appendChild(deleteBtn);
+
+                secondContainerHandle.appendChild(listDivTag);
+            }
+        }
+
+        // function to delete quote from localStorage
+        function deleteLocalQuote(value) {
+            let local = JSON.parse(localStorage.getItem('localQuotes'));
+            local.splice(value, 1);
+            localStorage.setItem('localQuotes', JSON.stringify(local));
+            listLocalQuotes(); // to display all local quotes after delete
+        }
+
+        // function to edit quote present in localStorage
+        function editLocalQuote(value) {
+            let allDivs = document.getElementsByClassName('tempDiv');
+            let allEdits = document.getElementsByClassName('dynamicEdit');
+            let allQuotes = document.getElementsByClassName('quoteTag');
+            let allAuthors = document.getElementsByClassName('authorTag');
+            let allSaveButtons = document.getElementsByClassName('dynamicSave');
+            let allcancelEditBtns = document.getElementsByClassName('dynamicCancel');
+            let alldeleteBtns = document.getElementsByClassName('dynamicDelete');
+
+            allEdits[value].disabled = true;
+            allEdits[value].hidden = true;
+            allcancelEditBtns[value].disabled = false;
+            allcancelEditBtns[value].hidden = false;
+            allSaveButtons[value].hidden = false;
+            allSaveButtons[value].disabled = false;
+            alldeleteBtns[value].disabled = true;
+            allQuotes[value].setAttribute('contenteditable', 'true');
+            allAuthors[value].setAttribute('contenteditable', 'true');
+            placeCaretAtEnd(allQuotes[value]);
+        }
+
+        // function to save edited quote back to localStorage
+        function saveEditedQuote(value) {
+            let allEdits = document.getElementsByClassName('dynamicEdit');
+            let allQuotes = document.getElementsByClassName('quoteTag');
+            let allAuthors = document.getElementsByClassName('authorTag');
+            allEdits[value].disabled = false;
+            allEdits[value].hidden = false;
+            let editedLocalQuote = {
+                quote: allQuotes[value].innerText,
+                author: allAuthors[value].innerText.slice(1)
+            };
+            let localStorageQuotes = JSON.parse(localStorage.getItem('localQuotes'));
+            localStorageQuotes[value] = editedLocalQuote; // adding the edited back to localStorage
+            localStorage.setItem('localQuotes', JSON.stringify(localStorageQuotes));
+            listLocalQuotes(); // to display all local quotes after edit-save.
+        }
+
+        // function to cancel edit / cancel changes made (before saving)
+        function cancelEdit() {
+            listLocalQuotes(); // just displaying the previously stored quotes i.e before editing.
+        }
+
+        /* ************* go-to top functionality below, scrolls the user to the top of the page ************ */
+        window.onscroll = function () { scrollFunction() };
+        function scrollFunction() {
+            if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) {
+                document.getElementById("myBtn").style.display = "block";
+            } else {
+                document.getElementById("myBtn").style.display = "none";
+            }
+        }
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+
+        /*functionality to place cursor at the end of text while editing (*works only for Quote field and not for author field*) */
+        function placeCaretAtEnd(el) {
+            // el.focus();
+            if (typeof window.getSelection != "undefined"
+                && typeof document.createRange != "undefined") {
+                var range = document.createRange();
+                range.selectNodeContents(el);
+                range.collapse(false);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } else if (typeof document.body.createTextRange != "undefined") {
+                var textRange = document.body.createTextRange();
+                textRange.moveToElementText(el);
+                textRange.collapse(false);
+                textRange.select();
+            }
+        }
+    </script>
+</body>
+
+</html>

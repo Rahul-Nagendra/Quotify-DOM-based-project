@@ -1,0 +1,216 @@
+
+body{
+    background-color:#f4f4f4;
+    /* border: 2px solid black; */
+    width:80%;
+    margin:auto;
+    padding: 1em;
+}
+
+/* a:hover{
+   color:black;
+} */
+
+p{
+    font: 20px serif;
+    font-style: oblique;
+    font-weight: bold;
+    border:2px black solid;
+    border-radius: 15px;
+    background-color:#707070;
+    padding: 0.3em;
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: center;
+    box-shadow: 2px 2px 4px 2px black;
+    font-family: 'Trebuchet MS';
+}
+
+.para-class-author, .authorTag {
+    font-size: 20px;
+    font-style: italic;
+    font-weight: bold;
+    font-family: 'Trebuchet MS';
+    padding-left: 1em;
+    color: black;
+    text-align: center;
+    text-shadow: 0.7px 0.7px black;  
+}
+
+#root{
+    margin:2em;
+}
+
+#typedQuote{
+    width:65%;
+    display: block;
+    background-color: rgb(172, 172, 172);
+    padding: 1em;
+    font-weight: bold;
+    font-family: 'Trebuchet MS';
+    font-size: 20px;
+    margin: 1em;
+    border-radius: 5px;
+    margin-top: 0.5em;
+    margin-left:8em;
+    border:1px black solid;
+    box-shadow: 2px 2px 3px 2px black;
+}
+
+#typedAuthor{
+    display: block;
+    background-color: rgb(172, 172, 172);
+    padding: 0.5em;
+    font-weight: bold;
+    font-family: 'Trebuchet MS';
+    width:40%;
+    font-size: 20px;
+    margin: 1em;
+    margin-bottom: 2em;
+    margin-top: 0.5em;
+    margin-left:15em;
+    border-radius: 5px;
+    border:1px black solid;
+    box-shadow: 2px 2px 3px 2px black;
+}
+
+#addQuoteSpan, #addAuthorSpan{
+    font-weight: bold;
+    font-family: 'Trebuchet MS';
+    font-size: 25px;
+    margin-left: 19em;
+}
+
+.all-links{
+    display: flex;
+    background-color: rgb(63, 156, 63);
+    border-radius: 10px;
+    padding: 0em;
+    border: 2px black solid;
+    font: 20px 'Trebuchet MS';
+    text-decoration:underline;
+    margin-top: 1em;
+    font-weight: bold;
+    box-shadow: 2px 2px 3px 2px black;
+
+}
+
+a{
+    padding: 0.6em;
+    padding-left: 2.2em;
+    color: rgba(2, 2, 105, 0.877);
+}
+
+button{
+    background-color: rgb(80, 116, 150);
+	color:black;
+    padding:10px 15px;
+    font-weight: bold;
+    border:1px black solid;
+    border-radius: 5px;
+    margin-top: 0em;
+    margin-left: 2.5em;
+    margin-right: 0em;
+    margin-bottom: 3em;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+    box-shadow: 3px 3px 5px 3px black;
+    text-shadow: 0.3px 0.3px black;
+} 
+
+a:link {
+    color: red;
+}
+
+a:visited {
+    color: green;
+
+}
+
+a:hover {
+    color: orangered;
+}
+
+a:active {
+    color:black;
+}
+
+.header-tag{
+    position: relative;
+}
+
+.title-tag{
+    width: 93%;
+    font-family: 'Trebuchet MS', 'Helvetica';
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+    padding-left: 0.5em;
+    display: inline-block;
+}
+
+.dynamicDelete{
+    background-color: red;
+    /* position: absolute; */
+    /* right: 180px; */
+    float: right;
+    margin-right: 2.5em;
+}
+
+.dynamicSave, .saveBtn{
+    background-color: green;
+}
+
+.dynamicCancel{
+    background-color: coral;
+    /* display:inline-block; */
+    display: hidden;
+}
+
+.saveBtn{
+    margin-left: 1em;
+}
+
+#saveToLocalBtn{
+    float: right;
+    margin-right: 3.5em;
+}
+
+#onlineBtn{
+    margin-left: 3.5em;
+}
+
+#getQuoteFromLocal{
+    margin-left: 15.5em;
+}
+
+#saveUserQuote{
+    margin-left:21em;
+    display: inline-block;
+}
+
+#myBtn {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    right: 7px;
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    margin-right: 0.5em;
+  }
+  
+  #myBtn:hover {
+    background-color: #555;
+  }
+
+#up{
+    font-size: 35px;
+    font-weight: bold;
+}
